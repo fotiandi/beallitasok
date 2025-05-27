@@ -1,0 +1,11 @@
+sudo apt update
+sudo apt install nftables
+sudo nano /etc/resolv.conf
+sudo apt update
+sudo apt-get install isc-dhcp-server
+sudo nano /etc/dhcp/dhcpd.conf
+sudo apt update 
+sudo apt install apache2
+sudo nano /var/wwww/html/index.html
+sudo apt update
+sudo apt-get install samba -y
