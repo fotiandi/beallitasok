@@ -1,0 +1,136 @@
+- RIPv2: 
+router rip
+version 2
+network <ip cím> <hálózati cím>
+no auto summary
+
+- OSPF:
+router ospf <id>
+network <hálózati cím> <helyettesítő maszk> area <id>
+exit
+
+- EIGRP:
+router eigrp <id>
+network <hálózati cím> <alhálózati maszk>
+
+- BGP:
+router bgp <id>
+bgp router-id 1.1.1.1
+network <hálózati cím> mask <alhálózati maszk>
+neighbor <ip> remote-as <másik rész id-je>
+
+-Routolás
+ip route <hálózati azonosító> <alhálózati maszk> <router ipcím>
+
+- belső interface NAT 
+interface Gi0/0
+ip nat inside
+
+- külső interface NAT
+interface Se0/0/1
+ip nat outside
+
+- VLAN Beállítás Switchen
+conf t 
+vlan <VLAN_ID>
+name <VLAN_NAME>
+
+- VLAN hozzárendelés porthoz
+interfaces port name (pl:Gi0/0)
+switchport mode access
+switchport access vlan {VLAN ID}
+
+- Másik ID-jű VLAN
+// Mire jó a trunk? külömböző ID-jű VLAN-at leszel képes hozzárendelni úgy hogy működjön //
+interfaces Gi0/2
+switchport mode trunk
+switchport trunk allowed vlan 20,40
+
+- Switch ip címzés
+interface vlan1
+ip address 192.168.0.2 255.255.255.0
+no shudown
+exit
+ip default-gateway 192.168.0.1
+
+- Privilegizált exec mód védő jelszó
+hostname R1
+enable password jelszo123
+line vty 0 4
+password jelszocisco
+login
+
+-hostname switch
+enable password jelszo123
+line vty 0 15 
+password jelszocisco
+login
+
+- DNS DHCP:
+hostname <router név>
+ip dhcp pool <pool-name>
+network <hálózati ipcím alhálózati maszk>
+ip dhcp excluded-address <hálózati ip-tol háló ip-ig>
+domain name <tartomány név>
+default-router <dns kiszolgalo ipcíme>
+dns-server <dns-szerver ipcím>
+
+- napi üzenet
+banner motd $Hello$
+
+- jelszó titkosítás
+service password-encryption
+
+- aktív konfiguráció listázása:
+show running-config
+
+- EIGRP ÉS OSPF KÖZÖTTI KAPCSOLAT
+router ospf 1
+redistribute eigrp 1 metric 1 subnets 
+
+router eigrp 1
+redistribute ospf 1 metric 1 1000 255 1 1
+
+- - - - - - - - - - - - - - 
+
+- RIP ÉS OSPF KÖZÖTTI KAPCSOLAT
+router rip
+version 2
+redistribute ospf 10 metric 1 
+
+router ospf 10
+redistribute rip metric 1 subnets 
+
+- - - - - - - - - - - - - - 
+
+- RIP ÉS EIGRP KÖZÖTTI KAPCSOLAT
+router rip
+version 2
+redistribute eigrp 10 metric 1 
+
+router eigrp 1
+redistribute rip metric 10000 1 255 1 1500
+- - - - - - - - - - - -
+
+- VTP bellítása: 
+vtp domain  domain név 
+vtp mode client / vagy transparent -->TRUNK!
+vtp password jelszo
+
+- Etherchannel:
+interface range pl. fa0/10-11
+channel-group number mode active
+VLAN trunk engedélyezése:
+switchport mode trunk
+switchport trunk allowed vlan vlan szam
+
+- NAT
+                     hálozati ip
+access.list 5 permit <belső ip> <helyettesítő maszk> 
+ip nat pool <name> <first ip last ip> netmask <hálozati cím>
+<ip nt inside source list 1 pool <name> overload
+
+  ip nat inside        ip nat outside
+pc ------------ router --------------- isp
+
+show ip nat translation
