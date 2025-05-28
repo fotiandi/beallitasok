@@ -9,3 +9,15 @@ sudo apt install apache2
 sudo nano /var/wwww/html/index.html
 sudo apt update
 sudo apt-get install samba -y
+
+
+
+IPTABLES TŰZFAL 
+sudo iptables -A INPUT -p icmp --icmp-type echo-request -d 127.0.0.1 -j DROP
+c. Engedélyezze az FTP kapcsolatot (port 21):
+sudo iptables -A INPUT -p tcp --dport 21 -j ACCEPT
+d. Engedélyezze a HTTP kapcsolatot (port 80):
+sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+e. Engedélyezze a DNS szervert (port 53 UDP és TCP):
+sudo iptables -A INPUT -p udp --dport 53 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 53 -j ACCEPT
