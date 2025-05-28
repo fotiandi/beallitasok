@@ -124,6 +124,12 @@ VLAN trunk engedélyezése:
 switchport mode trunk
 switchport trunk allowed vlan vlan szam
 
+- SSH beállítása:
+line vty 0 15
+transport input ssh 
+exit	
+username David password 1234	
+
 - NAT
                      hálozati ip
 access.list 5 permit <belső ip> <helyettesítő maszk> 
