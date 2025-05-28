@@ -1,0 +1,45 @@
+nano /etc/resolv.conf
+
+domain <vlami.local>
+nameserver <x.x.x.x>
+nameserver <x.x.x.x>
+
+--------------------
+
+apt-get install samba
+nano /etc/samba/smb.conf
+
+[sambashare]
+
+comment = megosztas
+
+path = /home/debian/megosztas
+
+read only = no
+guest ok = no
+writeable = yes
+
+--------------------
+
+nano /etc/nftables.conf
+
+type filter hook input priority 0; policy drop
+
+iif lo accept
+tcp dport ssh accept
+tcp dport {80,443} accept
+udp dport 53 accept
+
+--------------------
+
+nano /var/www/html/index.html
+
+--------------------
+
+nano /etc/network/interfaces
+
+auto -> static 
+
+address <ip cím>
+network <alh.maszk>
+gateway <elso ip>
